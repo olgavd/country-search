@@ -107,6 +107,14 @@ describe('searchCountries', () => {
 
     const request = searchCountries('france', controller.signal);
 
+    expect(fetchMock).toHaveBeenCalledTimes(1);
+    expect(controller.signal.aborted).toBe(false);
+    expect(fetchMock).toHaveBeenCalledWith('https://countries.dev/name/france', {
+      signal: controller.signal,
+    });
+
+    expect(fetchMock.mock.calls[0]?.[1]?.signal).toBe(controller.signal);
+
     controller.abort();
 
     await expect(request).rejects.toMatchObject({
