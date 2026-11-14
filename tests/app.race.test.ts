@@ -115,4 +115,59 @@ describe('createSearchController', () => {
       expect(onError).toHaveBeenCalledWith(expect.objectContaining({ name: 'TimeoutError' }));
     });
   });
+
+  test('не должна запускать устаревший поиск после отмены предыдущего запроса', async () => {
+    vi.useFakeTimers();
+
+    const signals: AbortSignal[] = [];
+
+    const search = vi.fn((_query: string, signal: AbortSignal): Promise<unknown[]> => {
+      signals.push(signal);
+
+      return new Promise((_resolve, reject) => {
+        signal.addEventListener(
+          'abort',
+          () => {
+            reject(signal.reason);
+          },
+          { once: true },
+        );
+      });
+    });
+
+    const onError = vi.fn();
+
+    const controller = createSearchController({
+      search,
+      onResults: vi.fn(),
+      onError,
+      delay: 300,
+    });
+
+    controller.handleInput('france');
+
+    await vi.advanceTimersByTimeAsync(300);
+
+    expect(search).toHaveBeenCalledTimes(1);
+    expect(search).toHaveBeenLastCalledWith('france', expect.any(AbortSignal));
+
+    controller.handleInput('franci');
+
+    expect(signals[0]?.aborted).toBe(true);
+
+    controller.handleInput('franc');
+
+    await vi.advanceTimersByTimeAsync(299);
+
+    expect(search).toHaveBeenCalledTimes(1);
+
+    await vi.advanceTimersByTimeAsync(1);
+
+    expect(search).toHaveBeenCalledTimes(2);
+    expect(search).toHaveBeenLastCalledWith('franc', expect.any(AbortSignal));
+
+    expect(search.mock.calls.map(([query]) => query)).toEqual(['france', 'franc']);
+
+    expect(onError).not.toHaveBeenCalled();
+  });
 });
