@@ -74,4 +74,46 @@ describe('createSearchController', () => {
 
     expect(onError).not.toHaveBeenCalled();
   });
+
+  test('должна передавать TimeoutError в onError при превышении времени ожидания', async () => {
+    vi.useFakeTimers();
+
+    const timeoutController = new AbortController();
+
+    vi.spyOn(AbortSignal, 'timeout').mockReturnValue(timeoutController.signal);
+
+    const search = vi.fn((_query: string, signal: AbortSignal): Promise<unknown[]> => {
+      return new Promise((_resolve, reject) => {
+        signal.addEventListener(
+          'abort',
+          () => {
+            reject(signal.reason);
+          },
+          { once: true },
+        );
+      });
+    });
+
+    const onError = vi.fn();
+
+    const controller = createSearchController({
+      search,
+      onResults: vi.fn(),
+      onError,
+      delay: 300,
+      timeoutMs: 5000,
+    });
+
+    controller.handleInput('france');
+
+    await vi.advanceTimersByTimeAsync(300);
+
+    expect(search).toHaveBeenCalledTimes(1);
+
+    timeoutController.abort(new DOMException('Request timed out', 'TimeoutError'));
+
+    await vi.waitFor(() => {
+      expect(onError).toHaveBeenCalledWith(expect.objectContaining({ name: 'TimeoutError' }));
+    });
+  });
 });
