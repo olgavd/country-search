@@ -5,6 +5,7 @@ interface SearchControllerOptions<T> {
   onResults: (results: T[]) => void;
   onError: (error: unknown) => void;
   delay: number;
+  timeoutMs?: number;
 }
 
 interface SearchController {
@@ -18,10 +19,14 @@ export function createSearchController<T>(options: SearchControllerOptions<T>): 
     const controller = new AbortController();
     activeController = controller;
 
-    try {
-      const results = await options.search(query, controller.signal);
+    const timeoutSignal = AbortSignal.timeout(options.timeoutMs ?? 5000);
 
-      if (!controller.signal.aborted) {
+    const signal = AbortSignal.any([controller.signal, timeoutSignal]);
+
+    try {
+      const results = await options.search(query, signal);
+
+      if (!signal.aborted) {
         options.onResults(results);
       }
     } catch (error) {
@@ -30,6 +35,10 @@ export function createSearchController<T>(options: SearchControllerOptions<T>): 
       }
 
       options.onError(error);
+    } finally {
+      if (activeController === controller) {
+        activeController = null;
+      }
     }
   };
 

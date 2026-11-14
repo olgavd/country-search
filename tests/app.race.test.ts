@@ -101,7 +101,6 @@ describe('createSearchController', () => {
       onResults: vi.fn(),
       onError,
       delay: 300,
-      timeoutMs: 5000,
     });
 
     controller.handleInput('france');
