@@ -82,4 +82,37 @@ describe('searchCountries', () => {
       name: 'TimeoutError',
     });
   });
+
+  test('должна отменять выполняющийся fetch при вызове abort()', async () => {
+    const controller = new AbortController();
+
+    fetchMock.mockImplementation((_input, init) => {
+      return new Promise<Response>((_resolve, reject) => {
+        const signal = init?.signal;
+
+        if (!signal) {
+          reject(new Error('AbortSignal was not provided'));
+          return;
+        }
+
+        signal.addEventListener(
+          'abort',
+          () => {
+            reject(new DOMException('Request aborted', 'AbortError'));
+          },
+          { once: true },
+        );
+      });
+    });
+
+    const request = searchCountries('france', controller.signal);
+
+    controller.abort();
+
+    await expect(request).rejects.toMatchObject({
+      name: 'AbortError',
+    });
+
+    expect(controller.signal.aborted).toBe(true);
+  });
 });
