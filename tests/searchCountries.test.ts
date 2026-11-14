@@ -58,4 +58,28 @@ describe('searchCountries', () => {
 
     expect(result).toEqual([]);
   });
+
+  test('должна передавать AbortError при отмене запроса', async () => {
+    const abortError = new DOMException('Request aborted', 'AbortError');
+
+    fetchMock.mockRejectedValue(abortError);
+
+    const controller = new AbortController();
+
+    await expect(searchCountries('france', controller.signal)).rejects.toMatchObject({
+      name: 'AbortError',
+    });
+  });
+
+  test('должна передавать TimeoutError при превышении времени ожидания', async () => {
+    const timeoutError = new DOMException('Request timed out', 'TimeoutError');
+
+    fetchMock.mockRejectedValue(timeoutError);
+
+    const controller = new AbortController();
+
+    await expect(searchCountries('france', controller.signal)).rejects.toMatchObject({
+      name: 'TimeoutError',
+    });
+  });
 });
