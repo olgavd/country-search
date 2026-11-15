@@ -27,6 +27,10 @@ describe('mapCountryResponse', () => {
       region: 'Europe',
       population: 68000000,
       languages: ['French'],
+      description: '',
+      area: 0,
+      borders: [],
+      currencies: [],
     });
   });
 
@@ -74,6 +78,10 @@ describe('mapCountryResponse', () => {
       region: '',
       population: 0,
       languages: [],
+      description: '',
+      area: 0,
+      borders: [],
+      currencies: [],
     });
   });
 
@@ -96,6 +104,10 @@ describe('mapCountryResponse', () => {
       region: '',
       population: 0,
       languages: [],
+      description: '',
+      area: 0,
+      borders: [],
+      currencies: [],
     });
   });
 
@@ -124,6 +136,45 @@ describe('mapCountryResponse', () => {
       region: '',
       population: 0,
       languages: [],
+      description: '',
+      area: 0,
+      borders: [],
+      currencies: [],
+    });
+  });
+
+  test('должна преобразовывать дополнительные данные страны', () => {
+    const rawCountry = {
+      name: 'France',
+      flag: '🇫🇷',
+      capital: 'Paris',
+      region: 'Europe',
+      population: 67391582,
+      languages: [{ name: 'French' }],
+      area: 640679,
+      borders: ['AND', 'BEL', 'DEU', 'ITA'],
+      currencies: [
+        {
+          code: 'EUR',
+          name: 'Euro',
+          symbol: '€',
+        },
+      ],
+    };
+
+    const result = mapCountryResponse(rawCountry);
+
+    expect(result).toEqual({
+      name: 'France',
+      flag: '🇫🇷',
+      capital: 'Paris',
+      region: 'Europe',
+      population: 67391582,
+      languages: ['French'],
+      description: '',
+      area: 640679,
+      borders: ['AND', 'BEL', 'DEU', 'ITA'],
+      currencies: ['Euro (€)'],
     });
   });
 });
