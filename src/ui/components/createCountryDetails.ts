@@ -60,5 +60,19 @@ export function createCountryDetails(country: CountryCard): HTMLDialogElement {
 
   dialog.append(header, flag, detailsList);
 
+  let pointerDownOutside = false;
+
+  dialog.addEventListener('pointerdown', (event: PointerEvent) => {
+    pointerDownOutside = event.target === dialog;
+  });
+
+  dialog.addEventListener('pointerup', (event: PointerEvent) => {
+    if (pointerDownOutside && event.target === dialog) {
+      dialog.close();
+    }
+
+    pointerDownOutside = false;
+  });
+
   return dialog;
 }
