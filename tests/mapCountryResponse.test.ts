@@ -5,7 +5,9 @@ describe('mapCountryResponse', () => {
   test('должна преобразовывать данные страны в данные карточки', () => {
     const rawCountry = {
       name: 'France',
-      flag: '🇫🇷',
+      flags: {
+        svg: 'https://flagcdn.com/fr.svg',
+      },
       capital: 'Paris',
       region: 'Europe',
       population: 68000000,
@@ -22,7 +24,7 @@ describe('mapCountryResponse', () => {
 
     expect(result).toEqual({
       name: 'France',
-      flag: '🇫🇷',
+      flagImage: 'https://flagcdn.com/fr.svg',
       capital: 'Paris',
       region: 'Europe',
       population: 68000000,
@@ -37,7 +39,9 @@ describe('mapCountryResponse', () => {
   test('должна преобразовывать несколько языков в массив названий', () => {
     const rawCountry = {
       name: 'Belgium',
-      flag: '🇧🇪',
+      flags: {
+        svg: 'https://flagcdn.com/be.svg',
+      },
       capital: 'Brussels',
       region: 'Europe',
       population: 11500000,
@@ -52,7 +56,9 @@ describe('mapCountryResponse', () => {
   test('должна возвращать пустой массив, если языков нет', () => {
     const rawCountry = {
       name: 'Country',
-      flag: '🏳️',
+      flags: {
+        svg: 'https://flagcdn.com/un.svg',
+      },
       capital: '',
       region: 'Unknown',
       population: 0,
@@ -73,7 +79,7 @@ describe('mapCountryResponse', () => {
 
     expect(result).toEqual({
       name: 'France',
-      flag: '',
+      flagImage: '',
       capital: '',
       region: '',
       population: 0,
@@ -88,7 +94,9 @@ describe('mapCountryResponse', () => {
   test('должна подставлять значения по умолчанию для полей неправильного типа', () => {
     const rawCountry = {
       name: 123,
-      flag: null,
+      flags: {
+        svg: 123,
+      },
       capital: 456,
       region: false,
       population: '68000000',
@@ -99,7 +107,7 @@ describe('mapCountryResponse', () => {
 
     expect(result).toEqual({
       name: '',
-      flag: '',
+      flagImage: '',
       capital: '',
       region: '',
       population: 0,
@@ -114,7 +122,9 @@ describe('mapCountryResponse', () => {
   test('должна пропускать некорректные элементы массива языков', () => {
     const rawCountry = {
       name: 'Belgium',
-      flag: '🇧🇪',
+      flags: {
+        svg: 'https://flagcdn.com/be.svg',
+      },
       capital: 'Brussels',
       region: 'Europe',
       population: 11500000,
@@ -131,7 +141,7 @@ describe('mapCountryResponse', () => {
 
     expect(result).toEqual({
       name: '',
-      flag: '',
+      flagImage: '',
       capital: '',
       region: '',
       population: 0,
@@ -146,7 +156,9 @@ describe('mapCountryResponse', () => {
   test('должна преобразовывать дополнительные данные страны', () => {
     const rawCountry = {
       name: 'France',
-      flag: '🇫🇷',
+      flags: {
+        svg: 'https://flagcdn.com/fr.svg',
+      },
       capital: 'Paris',
       region: 'Europe',
       population: 67391582,
@@ -166,7 +178,7 @@ describe('mapCountryResponse', () => {
 
     expect(result).toEqual({
       name: 'France',
-      flag: '🇫🇷',
+      flagImage: 'https://flagcdn.com/fr.svg',
       capital: 'Paris',
       region: 'Europe',
       population: 67391582,
