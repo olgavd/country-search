@@ -51,7 +51,6 @@ export function createCountryDetails(country: CountryCard): HTMLDialogElement {
     createDetailItem('Region', country.region),
     createDetailItem('Population', country.population.toLocaleString()),
     createDetailItem('Languages', country.languages.join(', ')),
-    createDetailItem('Description', country.description),
     createDetailItem('Area', `${country.area.toLocaleString()} km²`),
     createDetailItem('Borders', country.borders.join(', ')),
     createDetailItem('Currencies', country.currencies.join(', ')),
