@@ -6,13 +6,13 @@
   "description": "Live country search application",
   "scripts": {
     "build": "tsc",
+    "watch": "tsc --watch",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "test": "vitest run",
     "test:watch": "vitest",
-    "dev": "tsc --watch",
     "typecheck": "tsc --noEmit",
     "prepare": "husky"
   },
