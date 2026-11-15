@@ -1,0 +1,1 @@
+{"version":3,"file":"createLoader.js","sourceRoot":"","sources":["../../../src/ui/components/createLoader.ts"],"names":[],"mappings":"AAAA,MAAM,UAAU,YAAY;IAC1B,MAAM,MAAM,GAAG,QAAQ,CAAC,aAAa,CAAC,KAAK,CAAC,CAAC;IAC7C,MAAM,CAAC,SAAS,CAAC,GAAG,CAAC,QAAQ,CAAC,CAAC;IAC/B,MAAM,CAAC,WAAW,GAAG,YAAY,CAAC;IAElC,OAAO,MAAM,CAAC;AAChB,CAAC"}
