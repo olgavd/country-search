@@ -27,6 +27,17 @@ export function createCountryDetails(country: CountryCard): HTMLDialogElement {
   title.id = 'country-details-title';
   title.textContent = country.name;
 
+  const flag = document.createElement('img');
+  flag.classList.add('country-details__flag');
+  flag.src = country.flagImage;
+  flag.alt = `Flag of ${country.name}`;
+
+  if (country.flagImage) {
+    flag.src = country.flagImage;
+  } else {
+    flag.hidden = true;
+  }
+
   const closeButton = document.createElement('button');
   closeButton.classList.add('country-details__close');
   closeButton.type = 'button';
@@ -37,12 +48,7 @@ export function createCountryDetails(country: CountryCard): HTMLDialogElement {
     dialog.close();
   });
 
-  header.append(title, closeButton);
-
-  const flag = document.createElement('p');
-  flag.classList.add('country-details__flag');
-  flag.textContent = country.flag;
-
+  header.append(flag, title, closeButton);
   const detailsList = document.createElement('dl');
   detailsList.classList.add('country-details__list');
 
@@ -58,7 +64,7 @@ export function createCountryDetails(country: CountryCard): HTMLDialogElement {
 
   dialog.setAttribute('aria-labelledby', title.id);
 
-  dialog.append(header, flag, detailsList);
+  dialog.append(header, detailsList);
 
   let pointerDownOutside = false;
 

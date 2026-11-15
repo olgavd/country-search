@@ -1,6 +1,6 @@
 export interface CountryCard {
   name: string;
-  flag: string;
+  flagImage: string;
   capital: string;
   region: string;
   population: number;
@@ -14,7 +14,7 @@ export interface CountryCard {
 export function mapCountryResponse(raw: unknown): CountryCard {
   const defaultCountry: CountryCard = {
     name: '',
-    flag: '',
+    flagImage: '',
     capital: '',
     region: '',
     population: 0,
@@ -33,7 +33,16 @@ export function mapCountryResponse(raw: unknown): CountryCard {
 
   const name = typeof country.name === 'string' ? country.name : '';
 
-  const flag = typeof country.flag === 'string' ? country.flag : '';
+  const flags = country.flags;
+
+  const flagImage =
+    typeof flags === 'object' &&
+    flags !== null &&
+    !Array.isArray(flags) &&
+    'svg' in flags &&
+    typeof flags.svg === 'string'
+      ? flags.svg
+      : '';
 
   const capital = typeof country.capital === 'string' ? country.capital : '';
 
@@ -77,7 +86,7 @@ export function mapCountryResponse(raw: unknown): CountryCard {
 
   return {
     name,
-    flag,
+    flagImage,
     capital,
     region,
     population,

@@ -22,13 +22,16 @@
 .country-details__header {
   display: flex;
   align-items: center;
-  justify-content: space-between;
   gap: 16px;
 
   margin-bottom: 20px;
 }
 
 .country-details__title {
+  flex: 1;
+  min-width: 0;
+  margin: 0;
+
   color: #1e293b;
   font-size: 26px;
   font-weight: 700;
@@ -64,11 +67,15 @@
 }
 
 .country-details__flag {
-  margin-bottom: 24px;
+  display: block;
 
-  font-size: 72px;
-  line-height: 1.2;
-  text-align: center;
+  width: 64px;
+  height: 44px;
+  flex-shrink: 0;
+
+  object-fit: contain;
+  border-radius: 6px;
+  background-color: #f1f5f9;
 }
 
 .country-details__list {
@@ -105,12 +112,17 @@
     border-radius: 12px;
   }
 
+  .country-details__header {
+    gap: 10px;
+  }
+
   .country-details__title {
     font-size: 21px;
   }
 
   .country-details__flag {
-    font-size: 56px;
+    width: 48px;
+    height: 34px;
   }
 
   .country-details__item {
